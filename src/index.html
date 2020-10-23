@@ -221,8 +221,8 @@
 
 			}
 
-			console.log('loading point cloud', window.location.host + "/data/" + projeto.potreehash + "/metadata.js");
-			Potree.loadPointCloud(window.location.host + "/data/" + projeto.potreehash + "/metadata.js", projeto.nome, e => {
+			console.log('loading point cloud', "../../" + projeto.potreehash + "/metadata.js");
+			Potree.loadPointCloud("../../" + projeto.potreehash + "/metadata.js", projeto.nome, e => {
 				console.log('point cloud loaded');
 				let pointcloud = e.pointcloud;
 				let scene = viewer.scene;
