@@ -48,6 +48,9 @@
 		style="position: absolute; z-index:1; left: 97%; top:1%" onclick="salvar()" disabled />
 	<script>
 		var projeto;
+		var urlParams = new URLSearchParams(window.location.search);
+		var projetoId = urlParams.get('id');
+		console.log("projeto id:", projetoId);
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 
 		viewer.setEDLEnabled(true);
@@ -162,7 +165,7 @@
 				}
 			}
 		}
-		$.get('/projetos/' + window.location.hash.replace("#/", ""), (valor) => {
+		$.get('/projetos/' + projetoId, (valor) => {
 			projeto = valor;
 			if (projeto.measures) {
 				montarMedidas(projeto.measures.medidas);
@@ -218,21 +221,20 @@
 
 			}
 
-			$.get('/info', (info) => {
-				Potree.loadPointCloud("/data/" + projeto.potreehash + "/metadata.js", projeto.nome, e => {
-					let pointcloud = e.pointcloud;
-					let scene = viewer.scene;
-					let material = pointcloud.material;
-					viewer.scene.addPointCloud(pointcloud);
-					material.pointColorType = Potree.PointColorType.RGB; // any Potree.PointColorType.XXXX 
-					material.size = 1;
-					material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-					material.shape = Potree.PointShape.SQUARE;
-					viewer.fitToScreen();
 
-					scene.addEventListener("marker_moved", function (ab) {
-						console.log(ab)
-					});
+			Potree.loadPointCloud("/data/" + projeto.potreehash + "/metadata.js", projeto.nome, e => {
+				let pointcloud = e.pointcloud;
+				let scene = viewer.scene;
+				let material = pointcloud.material;
+				viewer.scene.addPointCloud(pointcloud);
+				material.pointColorType = Potree.PointColorType.RGB; // any Potree.PointColorType.XXXX 
+				material.size = 1;
+				material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+				material.shape = Potree.PointShape.SQUARE;
+				viewer.fitToScreen();
+
+				scene.addEventListener("marker_moved", function (ab) {
+					console.log(ab)
 				});
 			});
 
